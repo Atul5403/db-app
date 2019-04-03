@@ -2,6 +2,24 @@ from tkinter import *
 import backend
 # Ctrl+ENTER to go to next line
 
+"""
+---App Structure---
+______________________________________________________________
+|						 HISAB KITAB						  |
+|_____________________________________________________________|
+|--ID--|--ID-BOX--|--NAME--|--NAME BOX--|--COST--|--COST BOX--|
+|_____________________________________________________________|
+|										|-----VIEW BUTTON-----|
+|										|----SEARCH BUTTON----|
+|							  			|----APPEND BUTTON----|
+|				  LIST BOX  			|----UPDATE BUTTON----|
+|										|----DELETE BUTTON----|
+|										|----CLOSE BUTTON-----|
+|_____________________________________________________________|
+
+"""
+
+
 def view_command():
 	list1.delete(0,END)
 	for row in backend.view():
@@ -9,25 +27,52 @@ def view_command():
 
 def search_command():
 	list1.delete(0,END)
-	for row in backend.search(Name_text.get(),Cost_text.get()):
+	for row in backend.search(Id_text.get(),Name_text.get(),Cost_text.get()):
 		list1.insert(END,row)
 
+def add_command():
+	if Name_text.get() and Cost_text.get():
+		backend.insert(Name_text.get(),Cost_text.get())
+		view_command()
+
+def update_command():
+	
+	backend.update(Id_text.get(),Name_text.get(),Cost_text.get())
+	view_command()
+
+def delete_command():
+	backend.delete(Id_text.get())
+	view_command()
+
+def quit():
+    global window
+    window.destroy()
+
+
 window = Tk()
+window.title('HISAB KITAB')
 
-
+l0 = Label(window, text = "ID")
+l0.grid(row = 0, column = 0)
 l1 = Label(window,text = "Name")
-l1.grid(row = 0,column = 0)
-
-l1 = Label(window,text = "Cost")
 l1.grid(row = 0,column = 2)
+l1 = Label(window,text = "Cost")
+l1.grid(row = 0,column = 4)
+l2 = Label(window,text = "profit/loss")
+l2.grid(row = 8, column = 0)
+
+
+Id_text = StringVar()
+e1 = Entry(window,textvariable= Id_text)
+e1.grid(row = 0, column = 1)
 
 Name_text = StringVar()
 e1 = Entry(window,textvariable= Name_text)
-e1.grid(row = 0, column = 1)
+e1.grid(row = 0, column = 3)
 
 Cost_text = StringVar()
 e1 = Entry(window,textvariable= Cost_text)
-e1.grid(row = 0, column = 3)
+e1.grid(row = 0, column = 5)
 
 list1 = Listbox(window, height = 6, width = 35)
 list1.grid(row = 2, column = 0,rowspan = 6, columnspan = 2)
@@ -44,16 +89,16 @@ b1.grid(row = 2, column = 3)
 b2 = Button(window,text = "Search Figure", width = 12, command = search_command)
 b2.grid(row = 3, column = 3)
 
-b3 = Button(window,text = "Add Figure", width = 12)
+b3 = Button(window,text = "Add Figure", width = 12,command = add_command)
 b3.grid(row = 4, column = 3)
 
-b4 = Button(window,text = "Update Figure", width = 12)
+b4 = Button(window,text = "Update Figure", width = 12, command = update_command)
 b4.grid(row = 5, column = 3)
 
-b5 = Button(window,text = "Delete Figure", width = 12)
+b5 = Button(window,text = "Delete Figure", width = 12, command = delete_command)
 b5.grid(row = 6, column = 3)
 
-b6 = Button(window,text = "Close", width = 12)
+b6 = Button(window,text = "Close", width = 12,command=quit)
 b6.grid(row = 7, column = 3)
 
 

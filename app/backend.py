@@ -7,13 +7,7 @@ def connect():
 	conn.commit()
 	conn.close()
 
-def insert(name, cost):
-	conn = sqlite3.connect('kharcha.db')
-	cur = conn.cursor()
-	cur.execute("INSERT INTO kharch VALUES (NULL,?,?)",(name, cost))
-	conn.commit()
-	conn.close()
-
+# working in both 
 def view():
 	conn = sqlite3.connect('kharcha.db')
 	cur = conn.cursor()
@@ -22,14 +16,38 @@ def view():
 	conn.close()
 	return rows
 
-def search(name="",cost=""):
+# working in both
+def search(id="",name="",cost=""):
 	conn = sqlite3.connect('kharcha.db')
 	cur = conn.cursor()
-	cur.execute("SELECT * FROM kharch WHERE name = ? OR cost = ?",(name,cost))
+	cur.execute("SELECT * FROM kharch WHERE id = ? OR name = ? OR cost = ?",(id,name,cost))
 	rows = cur.fetchall()
 	conn.close()
 	return rows
 
+# working in both
+def insert(name, cost):
+	conn = sqlite3.connect('kharcha.db')
+	cur = conn.cursor()
+	cur.execute("INSERT INTO kharch VALUES (NULL,?,?)",(name, cost))
+	conn.commit()
+	conn.close()
+
+# working in backend
+# setting other values to ""
+def update(id="",name="",cost=""):
+	conn = sqlite3.connect('kharcha.db')
+	cur = conn.cursor()
+	if name == "":
+		cur.execute("UPDATE kharch SET  cost = ? WHERE id = ?",(cost,id))
+	elif cost == "":
+		cur.execute("UPDATE kharch SET name = ? WHERE id = ?",(name,id))
+	elif name != "" and cost != "":
+		cur.execute("UPDATE kharch SET name = ?,cost = ? WHERE id = ?",(name,cost,id))
+	conn.commit()
+	conn.close()
+
+# working in both
 def delete(id):
 	conn = sqlite3.connect('kharcha.db')
 	cur = conn.cursor()
@@ -37,14 +55,10 @@ def delete(id):
 	conn.commit()
 	conn.close()
 
-def update(id,name,cost):
-	conn = sqlite3.connect('kharcha.db')
-	cur = conn.cursor()
-	cur.execute("UPDATE kharch SET name = ?, cost = ? WHERE id = ?",(name,cost,id))
-	conn.commit()
-	conn.close()
+
+
 	
 connect()
-update(2,"haria",3000)
-#insert('hari',2000)
+update(6,"veer",111)
+
 print(view())
