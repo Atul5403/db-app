@@ -6,6 +6,7 @@ def connect():
 	cur.execute("CREATE TABLE IF NOT EXISTS kharch (id INTEGER PRIMARY KEY, name TEXT, cost INTEGER)")
 	conn.commit()
 	conn.close()
+	print("connected to database")
 
 # working in both 
 def view():
@@ -15,6 +16,7 @@ def view():
 	rows = cur.fetchall()
 	conn.close()
 	return rows
+	print("fetched all data")
 
 # working in both
 def search(id="",name="",cost=""):
@@ -33,8 +35,7 @@ def insert(name, cost):
 	conn.commit()
 	conn.close()
 
-# working in backend
-# setting other values to ""
+# working in both
 def update(id="",name="",cost=""):
 	conn = sqlite3.connect('kharcha.db')
 	cur = conn.cursor()
@@ -55,10 +56,16 @@ def delete(id):
 	conn.commit()
 	conn.close()
 
+def summation():
+	conn = sqlite3.connect('kharcha.db')
+	cur = conn.cursor()
+	cur.execute("SELECT SUM(cost) FROM kharch")
+	a = cur.fetchall()[0][0]
+	conn.commit()
+	conn.close()
+	return a
+
 
 
 	
 connect()
-update(6,"veer",111)
-
-print(view())
